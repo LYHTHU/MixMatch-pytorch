@@ -31,7 +31,7 @@ parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
 parser.add_argument('--batch-size', default=64, type=int, metavar='N',
                     help='train batchsize')
-parser.add_argument('--lr', '--learning-rate', default=0.002, type=float,
+parser.add_argument('--lr', '--learning-rate', default=2e-3, type=float,
                     metavar='LR', help='initial learning rate')
 # Checkpoints
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
@@ -87,8 +87,8 @@ def main():
 
     transform_train = transforms.Compose([
         # dataset.RandomPadandCrop(32),
-        transforms.Resize((32, 32)),
-        transforms.RandomCrop(32),
+        # transforms.Resize((32, 32)),
+        # transforms.RandomCrop(32),
         transforms.RandomHorizontalFlip(p=0.5),
         transforms.RandomVerticalFlip(p=0.5),
         transforms.ToTensor(),

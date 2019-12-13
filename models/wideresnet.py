@@ -78,11 +78,18 @@ class WideResNet(nn.Module):
                 m.bias.data.zero_()
 
     def forward(self, x):
+        x = F.avg_pool2d(x, 3)
         out = self.conv1(x)
+        # print(out.size())
         out = self.block1(out)
+        # print(out.size())
         out = self.block2(out)
+        # print(out.size())
         out = self.block3(out)
+        # print(out.size())
         out = self.relu(self.bn1(out))
+        # print(out.size())
         out = F.avg_pool2d(out, 8)
+        # print(out.size())
         out = out.view(-1, self.nChannels)
         return self.fc(out)
