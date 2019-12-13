@@ -86,12 +86,14 @@ def main():
         dataset.ToTensor(),
     ])
 
-    train_labeled_set, train_unlabeled_set, val_set, test_set = dataset.get_cifar10('./data', args.n_labeled, transform_train=transform_train, transform_val=transform_val)
+    # train_labeled_set, train_unlabeled_set, val_set, test_set = dataset.get_cifar10('./data', args.n_labeled, transform_train=transform_train, transform_val=transform_val)
     # labeled_trainloader = data.DataLoader(train_labeled_set, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=True)
-    unlabeled_trainloader = data.DataLoader(train_unlabeled_set, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=True)
+    # unlabeled_trainloader = data.DataLoader(train_unlabeled_set, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=True)
     # val_loader = data.DataLoader(val_set, batch_size=args.batch_size, shuffle=False, num_workers=0)
     # test_loader = data.DataLoader(test_set, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
+    train_unlabeled_set = stl10.get_dataset_all()
+    unlabeled_trainloader = stl10.get_loader(train_unlabeled_set, batch_size=args.batch_size, num_workers=0)
     train_labeled_set = stl10.get_train_label_dataset()
     labeled_trainloader = stl10.get_loader(train_labeled_set, batch_size=args.batch_size, num_workers=0)
     test_dataset = stl10.get_test_dataset()

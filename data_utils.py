@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import torch
 import torchvision
 import torchvision.datasets as datasets
@@ -6,6 +8,9 @@ from torch.utils.data.sampler import SubsetRandomSampler, SequentialSampler, Ran
 import torchvision.transforms as transforms
 import numpy as np
 
+from PIL import Image
+import os
+
 
 default_transform = transforms.Compose([
     transforms.Resize((32, 32)),
@@ -13,12 +18,43 @@ default_transform = transforms.Compose([
     # transforms.Normalize((0.3337, 0.3064, 0.3171), ( 0.2672, 0.2564, 0.2629))
 ])
 
-def get_dataset_all(transform=default_transform ):
-    dataset_unlabel = datasets.STL10('..', split='unlabeled', transform=transform, download=False)
+class MySTL10(datasets.STL10):
+    def __init__(self, *args, **kwargs):
+        super(MySTL10, self).__init__(*args, **kwargs)
+
+    def __getitem__(self, index):
+        """
+        Args:
+            index (int): Index
+
+        Returns:
+            tuple: (image, target) where target is index of the target class.
+        """
+        if self.labels is not None:
+            img, target = self.data[index], int(self.labels[index])
+        else:
+            img, target = self.data[index], None
+
+        # doing this so that it is consistent with all other datasets
+        # to return a PIL Image
+        img = Image.fromarray(np.transpose(img, (1, 2, 0)))
+
+        if self.transform is not None:
+            img1 = self.transform(img)
+            img2 = self.transform(img)
+
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+
+        return (img1, img2), target
+
+
+def get_dataset_all(transform=default_transform):
+    dataset_unlabel = MySTL10('..', split='unlabeled', transform=transform, download=False)
     return dataset_unlabel
 
 
-def get_train_label_dataset(transform=default_transform ):
+def get_train_label_dataset(transform=default_transform):
     train_dataset_label = datasets.STL10('..', split='train', transform=transform, download=False)
     return train_dataset_label
 
