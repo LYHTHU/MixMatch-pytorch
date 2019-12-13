@@ -75,16 +75,26 @@ def main():
         mkdir_p(args.out)
 
     # Data
-    print(f'==> Preparing cifar10')
+    print(f'==> Preparing stl-10')
+    # transform_train = transforms.Compose([
+    #     dataset.RandomPadandCrop(32),
+    #     dataset.RandomFlip(),
+    #     dataset.ToTensor(),
+    # ])
+    # transform_val = transforms.Compose([
+    #     dataset.ToTensor(),
+    # ])
+
     transform_train = transforms.Compose([
-        dataset.RandomPadandCrop(32),
-        dataset.RandomFlip(),
-        dataset.ToTensor(),
+        # dataset.RandomPadandCrop(32),
+        transforms.Resize((32, 32)),
+        transforms.RandomCrop(32),
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.RandomVerticalFlip(p=0.5),
+        transforms.ToTensor(),
     ])
 
-    transform_val = transforms.Compose([
-        dataset.ToTensor(),
-    ])
+
 
     # train_labeled_set, train_unlabeled_set, val_set, test_set = dataset.get_cifar10('./data', args.n_labeled, transform_train=transform_train, transform_val=transform_val)
     # labeled_trainloader = data.DataLoader(train_labeled_set, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=True)
@@ -92,9 +102,9 @@ def main():
     # val_loader = data.DataLoader(val_set, batch_size=args.batch_size, shuffle=False, num_workers=0)
     # test_loader = data.DataLoader(test_set, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
-    train_unlabeled_set = stl10.get_dataset_all()
+    train_unlabeled_set = stl10.get_dataset_all(transform=transform_train)
     unlabeled_trainloader = stl10.get_loader(train_unlabeled_set, batch_size=args.batch_size, num_workers=0)
-    train_labeled_set = stl10.get_train_label_dataset()
+    train_labeled_set = stl10.get_train_label_dataset(transform=transform_train)
     labeled_trainloader = stl10.get_loader(train_labeled_set, batch_size=args.batch_size, num_workers=0)
     test_dataset = stl10.get_test_dataset()
     val_loader = stl10.get_loader(test_dataset, batch_size=args.batch_size, num_workers=0)
