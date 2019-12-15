@@ -85,12 +85,15 @@ def main():
     #     dataset.ToTensor(),
     # ])
 
+    size = int(96*0.9)
+
     transform_train = transforms.Compose([
         # dataset.RandomPadandCrop(32),
         # transforms.Resize((32, 32)),
         # transforms.RandomCrop(32),
+        transforms.RandomCrop(size, padding=None, pad_if_needed=False, fill=0, padding_mode='constant'),
         transforms.RandomHorizontalFlip(p=0.5),
-        transforms.RandomVerticalFlip(p=0.5),
+        # transforms.RandomVerticalFlip(p=0.5),
         transforms.ToTensor(),
     ])
 
