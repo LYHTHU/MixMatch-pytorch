@@ -49,7 +49,7 @@ parser.add_argument('--val-iteration', type=int, default=1024,
 parser.add_argument('--out', default='result',
                         help='Directory to output the result')
 parser.add_argument('--alpha', default=0.75, type=float)
-parser.add_argument('--lambda-u', default=75, type=float)
+parser.add_argument('--lambda-u', default=1, type=float)
 parser.add_argument('--T', default=0.5, type=float)
 parser.add_argument('--ema-decay', default=0.999, type=float)
 
