@@ -36,7 +36,7 @@ parser.add_argument('--lr', '--learning-rate', default=2e-4, type=float,
 # Checkpoints
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
-parser.add_argument('--train', default=True, type=bool, metavar='train',
+parser.add_argument('--train', default=1, type=int, metavar='train',
                     help='training or val')
 # Miscs
 parser.add_argument('--manualSeed', type=int, default=0, help='manual seed')
@@ -163,7 +163,7 @@ def main():
     # test_accs = []
     # Train and val
 
-    if not args.train:
+    if args.train == 0:
         val_loss, val_acc = validate(val_loader, ema_model, criterion, 0, use_cuda, mode='Valid Stats')
         return
 
